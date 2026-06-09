@@ -9,6 +9,7 @@ export default function Footer() {
 
     return (
         <footer className="footer-bottom">
+            <p>Matias Tello - Victor Vasquez - Programacion Front End - C2</p>
             <p>© 2026 Baity Lab - "It Just Works". 
                 <button 
                     id="ojos-secretos" 

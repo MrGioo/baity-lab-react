@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-// Fíjate que ahora recibe "openModal" entre las llaves
 export default function Header({ openModal }) {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
@@ -40,9 +39,8 @@ export default function Header({ openModal }) {
                 </button>
                 <div className="auth-container">
                     <div id="guestView">
-                        {/* AQUI CONECTAMOS LOS BOTONES */}
-                        <button onClick={() => openModal('login')} className="btn">Iniciar Sesión</button>
-                        <button onClick={() => openModal('register')} className="btn btn-outline">Registrarse</button>
+                        {/* Botón único para agregar noticias */}
+                        <button onClick={openModal} className="btn">Añadir Noticia</button>
                     </div>
                 </div>
             </div>
