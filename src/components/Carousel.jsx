@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-export default function Carousel({ slides, onStartEdit, onDelete }) {
+// 1. Agrega 'user' a las propiedades destructuradas
+export default function Carousel({ slides, onStartEdit, onDelete, user }) {
     const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
         if (!slides || slides.length === 0) return;
 
-        // Si se elimina el último elemento, ajustamos el índice para evitar errores
         if (activeIndex >= slides.length) {
             setActiveIndex(slides.length - 1);
         }
@@ -18,7 +18,6 @@ export default function Carousel({ slides, onStartEdit, onDelete }) {
         return () => clearInterval(intervalId);
     }, [slides, activeIndex]);
 
-    // R - READ: Si vacías el CRUD, muestra un estado elegante sin romper el diseño
     if (!slides || slides.length === 0) {
         return (
             <section className="carousel-container" id="noticias" style={{ padding: '4rem 2rem', textAlignment: 'center' }}>
@@ -40,23 +39,25 @@ export default function Carousel({ slides, onStartEdit, onDelete }) {
                     <div key={index} className={`carousel-item ${index === activeIndex ? 'active' : ''}`}>
                         <img src={slide.img} alt={slide.title} />
                         
-                        {/* Controles CRUD para la noticia en pantalla */}
-                        <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 30, display: 'flex', gap: '10px' }}>
-                            <button 
-                                onClick={() => onStartEdit(index)} 
-                                className="btn" 
-                                style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: '#f39c12', color: '#fff', margin: 0 }}
-                            >
-                                Editar
-                            </button>
-                            <button 
-                                onClick={() => onDelete(index)} 
-                                className="btn" 
-                                style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: '#e74c3c', color: '#fff', margin: 0 }}
-                            >
-                                Eliminar
-                            </button>
-                        </div>
+                        {/* 2. Condiciona este contenedor completo con {user && (...)} */}
+                        {user && (
+                            <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 30, display: 'flex', gap: '10px' }}>
+                                <button 
+                                    onClick={() => onStartEdit(index)} 
+                                    className="btn" 
+                                    style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: '#f39c12', color: '#fff', margin: 0 }}
+                                >
+                                    Editar
+                                </button>
+                                <button 
+                                    onClick={() => onDelete(index)} 
+                                    className="btn" 
+                                    style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: '#e74c3c', color: '#fff', margin: 0 }}
+                                >
+                                    Eliminar
+                                </button>
+                            </div>
+                        )}
 
                         <div className="carousel-caption">
                             <h3>{slide.title}</h3>

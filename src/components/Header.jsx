@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 
-export default function Header({ openModal }) {
+export default function Header({ 
+    user, 
+    onLogout, 
+    openNewsModal, 
+    openAuthModal, 
+    openContactModal 
+}) {
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
     useEffect(() => {
@@ -30,18 +36,24 @@ export default function Header({ openModal }) {
             </nav>
 
             <div className="nav-controls">
-                <button 
-                    className="theme-toggle" 
-                    onClick={toggleTheme} 
-                    aria-label="Cambiar tema"
-                >
+                <button className="theme-toggle" onClick={toggleTheme} aria-label="Cambiar tema">
                     {theme === 'dark' ? '☀️' : '🌙'}
                 </button>
-                <div className="auth-container">
-                    <div id="guestView">
-                        {/* Botón único para agregar noticias */}
-                        <button onClick={openModal} className="btn">Añadir Noticia</button>
-                    </div>
+                
+                <div className="auth-container" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {user ? (
+                        <>
+                            <span id="userGreeting" style={{ marginRight: '10px' }}>Hola, {user.name}</span>
+                            <button onClick={openNewsModal} className="btn" style={{ margin: '0' }}>Añadir Noticia</button>
+                            <button onClick={openContactModal} className="btn btn-outline" style={{ margin: '0' }}>Contacto</button>
+                            <button onClick={onLogout} className="btn-logout">Salir</button>
+                        </>
+                    ) : (
+                        <>
+                            <button onClick={() => openAuthModal('login')} className="btn" style={{ margin: '0' }}>Iniciar Sesión</button>
+                            <button onClick={() => openAuthModal('register')} className="btn btn-outline" style={{ margin: '0' }}>Registrarse</button>
+                        </>
+                    )}
                 </div>
             </div>
         </header>
