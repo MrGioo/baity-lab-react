@@ -5,7 +5,6 @@ import axios from 'axios';
 const API_USERS = 'https://6a4361206dba791499aa8527.mockapi.io/Usuarios';
 
 export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess }) {
-export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess }) {
     const [view, setView] = useState(initialView);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
