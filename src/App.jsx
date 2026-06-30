@@ -129,10 +129,23 @@ function App() {
         openAuthModal={handleOpenAuth}
         openContactModal={() => setIsContactModalOpen(true)}
       />
+      <Header 
+        user={user}
+        onLogout={handleLogout}
+        openNewsModal={() => { setEditIndex(null); setIsNewsModalOpen(true); }}
+        openAuthModal={handleOpenAuth}
+        openContactModal={() => setIsContactModalOpen(true)}
+      />
       
       <main>
         <Hero />
         <Stats />
+        <Carousel 
+          slides={news} 
+          onStartEdit={handleStartEdit} 
+          onDelete={handleDeleteNews} 
+          user={user}
+        />
         <Carousel 
           slides={news} 
           onStartEdit={handleStartEdit} 
@@ -154,6 +167,16 @@ function App() {
       />
 
       <AuthModal 
+        isOpen={isAuthModalOpen}
+        initialView={authView}
+        onClose={() => setIsAuthModalOpen(false)}
+        onAuthSuccess={handleAuthSuccess}
+      />
+
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        user={user}
         isOpen={isAuthModalOpen}
         initialView={authView}
         onClose={() => setIsAuthModalOpen(false)}

@@ -5,7 +5,11 @@ import axios from 'axios';
 const API_USERS = 'https://6a4361206dba791499aa8527.mockapi.io/Usuarios';
 
 export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess }) {
+export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess }) {
     const [view, setView] = useState(initialView);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -82,6 +86,56 @@ export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess 
                 <span className="close-btn" onClick={onClose}>&times;</span>
                 <h2>{view === 'login' ? 'Iniciar Sesión' : 'Registrarse'}</h2>
 
+                <form className="auth-form" onSubmit={handleSubmit}>
+                    {view === 'register' && (
+                        <div className="grupo-input">
+                            <label htmlFor="auth-name">Nombre completo</label>
+                            <input 
+                                id="auth-name"
+                                type="text" 
+                                placeholder="Ej: John Doe" 
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required 
+                            />
+                        </div>
+                    )}
+                    
+                    <div className="grupo-input">
+                        <label htmlFor="auth-email">Correo electrónico</label>
+                        <input 
+                            id="auth-email"
+                            type="email" 
+                            placeholder="tucorreo@ejemplo.com" 
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required 
+                        />
+                    </div>
+
+                    <div className="grupo-input">
+                        <label htmlFor="auth-password">Contraseña</label>
+                        <input 
+                            id="auth-password"
+                            type="password" 
+                            placeholder="********" 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required 
+                        />
+                    </div>
+
+                    <button type="submit" className="btn btn-submit">
+                        {view === 'login' ? 'Ingresar' : 'Crear cuenta'}
+                    </button>
+
+                    <p className="toggle-text">
+                        {view === 'login' ? '¿No tienes cuenta? ' : '¿Ya tienes cuenta? '}
+                        <span onClick={() => setView(view === 'login' ? 'register' : 'login')}>
+                            {view === 'login' ? 'Regístrate aquí' : 'Inicia sesión'}
+                        </span>
+                    </p>
+                </form>
                 <form className="auth-form" onSubmit={handleSubmit}>
                     {view === 'register' && (
                         <div className="grupo-input">
