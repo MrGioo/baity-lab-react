@@ -9,9 +9,6 @@ export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     useEffect(() => {
         setView(initialView);
@@ -44,9 +41,13 @@ export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess 
                     return alert('La contraseña debe tener al menos 6 caracteres.');
                 }
 
-                // AXIOS GET: Verificar si el correo ya existe en la API
-                const checkUser = await axios.get(`${API_USERS}?email=${email}`);
-                if (checkUser.data.length > 0) {
+                // CORRECCIÓN: Traemos los usuarios y comparamos el email de forma exacta en JS
+                const responseUsers = await axios.get(API_USERS);
+                const emailExists = responseUsers.data.some(
+                    (u) => u.email && u.email.toLowerCase() === email.toLowerCase()
+                );
+                
+                if (emailExists) {
                     return alert('Este correo ya está registrado.');
                 }
                 
@@ -61,9 +62,11 @@ export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess 
                 onAuthSuccess(response.data);
 
             } else {
-                // AXIOS GET: Buscar usuario por email en la API
-                const response = await axios.get(`${API_USERS}?email=${email}`);
-                const foundUser = response.data.find(u => u.password === password);
+                // CORRECCIÓN: Buscamos coincidencia exacta de Email Y Contraseña en JS
+                const response = await axios.get(API_USERS);
+                const foundUser = response.data.find(
+                    (u) => u.email && u.email.toLowerCase() === email.toLowerCase() && u.password === password
+                );
 
                 if (foundUser) {
                     localStorage.setItem('currentUser', JSON.stringify(foundUser));
@@ -85,56 +88,6 @@ export default function AuthModal({ isOpen, onClose, initialView, onAuthSuccess 
                 <span className="close-btn" onClick={onClose}>&times;</span>
                 <h2>{view === 'login' ? 'Iniciar Sesión' : 'Registrarse'}</h2>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
-                    {view === 'register' && (
-                        <div className="grupo-input">
-                            <label htmlFor="auth-name">Nombre completo</label>
-                            <input 
-                                id="auth-name"
-                                type="text" 
-                                placeholder="Ej: John Doe" 
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                required 
-                            />
-                        </div>
-                    )}
-                    
-                    <div className="grupo-input">
-                        <label htmlFor="auth-email">Correo electrónico</label>
-                        <input 
-                            id="auth-email"
-                            type="email" 
-                            placeholder="tucorreo@ejemplo.com" 
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required 
-                        />
-                    </div>
-
-                    <div className="grupo-input">
-                        <label htmlFor="auth-password">Contraseña</label>
-                        <input 
-                            id="auth-password"
-                            type="password" 
-                            placeholder="********" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required 
-                        />
-                    </div>
-
-                    <button type="submit" className="btn btn-submit">
-                        {view === 'login' ? 'Ingresar' : 'Crear cuenta'}
-                    </button>
-
-                    <p className="toggle-text">
-                        {view === 'login' ? '¿No tienes cuenta? ' : '¿Ya tienes cuenta? '}
-                        <span onClick={() => setView(view === 'login' ? 'register' : 'login')}>
-                            {view === 'login' ? 'Regístrate aquí' : 'Inicia sesión'}
-                        </span>
-                    </p>
-                </form>
                 <form className="auth-form" onSubmit={handleSubmit}>
                     {view === 'register' && (
                         <div className="grupo-input">
